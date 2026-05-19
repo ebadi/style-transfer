@@ -1,0 +1,16 @@
+# Secrets
+
+# Downloaded model weights (large binaries, restored via download_models.sh)
+models
+
+# Data directories (too large / user-specific)
+data/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Editor
+.vscode/
+.idea/
+*.swp

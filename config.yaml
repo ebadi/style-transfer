@@ -1,0 +1,36 @@
+input:
+  video: /data/input/image_recording_cam164.mp4  # path to your Gazebo video (mp4 or avi)
+  sample_images_dir: /data/sample_images/  # directory with your real factory images
+
+output:
+  video: /data/output/stylized_video.mp4
+  frames_dir: /data/output/frames/
+
+lora:
+  output_name: factory_lora                  # name for the trained LoRA file
+  training_steps: 2000                       # 1500-3000 recommended for ~200 images
+  rank: 8                                    # LoRA rank; 8 saves VRAM, 32 improves quality
+  learning_rate: 1e-4
+  resolution: 512                            # training resolution (512 recommended for SD1.5)
+  instance_prompt: "factory_style industrial warehouse photorealistic"
+  base_model_hf: "SG161222/Realistic_Vision_V5.1_noVAE"
+
+style_transfer:
+  base_model: "realisticVisionV51.safetensors"   # filename in models/checkpoints/
+  lora_strength: 0.85                            # how strongly to apply LoRA (0.0-1.0)
+  controlnet_strength: 0.80                      # structure preservation (higher = closer to original layout)
+  style_reference: null                           # filename in sample_images_dir to use as fixed style reference, null = first image found
+  ipadapter_weight: 0.55                         # style injection strength (higher = more factory-like)
+  denoising_strength: 0.60                       # img2img strength (lower = more similar to input frame)
+  steps: 20
+  cfg: 7.0
+  sampler: "euler_ancestral"
+  scheduler: "karras"
+  processing_resolution: 768                     # max side length for processing; "original" to disable scaling
+  prompt: "photorealistic industrial factory, warehouse interior, concrete floor, metal shelving, fluorescent overhead lighting, sharp details, high resolution, realistic"
+  negative_prompt: "animated, cartoon, 3d render, cgi, unrealistic, blurry, low quality, painterly, illustration, sketch, oversaturated, glowing white orb lighting, overexposed"
+
+video:
+  fps: auto        # auto detects from input; or set a number e.g. 25
+  codec: libx264
+  quality: 18      # CRF: 0=lossless, 18=high quality, 28=lower quality

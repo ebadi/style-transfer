@@ -1,0 +1,79 @@
+version: "3.8"
+
+services:
+  comfyui:
+    build: ./docker/comfyui
+    container_name: styletransfer_comfyui
+    ports:
+      - "8188:8188"
+    volumes:
+      - ./models:/app/ComfyUI/models
+      - comfyui_input:/app/ComfyUI/input
+      - comfyui_output:/app/ComfyUI/output
+      - ./workflows:/workflows
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['1']
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8188/system_stats"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
+    restart: unless-stopped
+
+  lora-trainer:
+    build: ./docker/lora-trainer
+    container_name: styletransfer_trainer
+    volumes:
+      - ./data/sample_images:/data/images:ro
+      - ./models/loras:/models/loras
+      - ./config.yaml:/config.yaml:ro
+      - ./scripts/prepare_dataset.py:/scripts/prepare_dataset.py:ro
+      - ./scripts/train_lora.sh:/scripts/train_lora.sh:ro
+      - lora_dataset:/data/prepared_dataset
+      - hf_cache:/root/.cache/huggingface
+    environment:
+      - HF_TOKEN=${HF_TOKEN:-}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0']
+              capabilities: [gpu]
+    profiles:
+      - training
+    command: bash /scripts/train_lora.sh
+
+  worker:
+    build: ./docker/worker
+    container_name: styletransfer_worker
+    volumes:
+      - ./data:/data
+      - ./models:/models:ro
+      - ./config.yaml:/config.yaml:ro
+      - ./workflows:/workflows:ro
+      - ./scripts/run_pipeline.py:/scripts/run_pipeline.py:ro
+      - comfyui_input:/comfyui_input
+      - comfyui_output:/comfyui_output
+    environment:
+      - COMFYUI_URL=http://comfyui:8188
+      - COMFYUI_INPUT_DIR=/comfyui_input
+      - COMFYUI_OUTPUT_DIR=/comfyui_output
+    depends_on:
+      comfyui:
+        condition: service_healthy
+    profiles:
+      - inference
+    command: python3 /scripts/run_pipeline.py
+
+volumes:
+  comfyui_input:
+  comfyui_output:
+  lora_dataset:
+  hf_cache:
