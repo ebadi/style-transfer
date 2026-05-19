@@ -1,5 +1,5 @@
 input:
-  video: /data/input/image_recording_cam164.mp4  # path to your Gazebo video (mp4 or avi)
+  video: /data/input/cam164.mp4  # path to your Gazebo video (mp4 or avi)
   sample_images_dir: /data/sample_images/  # directory with your real factory images
 
 output:
@@ -27,7 +27,7 @@ style_transfer:
   sampler: "euler_ancestral"
   scheduler: "karras"
   processing_resolution: 768                     # max side length for processing; "original" to disable scaling
-  prompt: "photorealistic industrial factory, warehouse interior, concrete floor, metal shelving, fluorescent overhead lighting, sharp details, high resolution, realistic"
+  prompt: "photorealistic industrial factory, warehouse interior, concrete floor texture, overhead birds-eye view, dramatic tilt angle, worn concrete floor, AVG, AMR, AMR automated mobile robot, concrete floor, metal shelving, yellow hazard stripe, yellow safety walkway markers, sharp details, high resolution, realistic"
   negative_prompt: "animated, cartoon, 3d render, cgi, unrealistic, blurry, low quality, painterly, illustration, sketch, oversaturated, glowing white orb lighting, overexposed"
 
 video:
