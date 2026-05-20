@@ -9,7 +9,7 @@ output:
 lora:
   output_name: factory_lora                  # name for the trained LoRA file
   training_steps: 2000                       # 1500-3000 recommended for ~200 images
-  rank: 8                                    # LoRA rank; 8 saves VRAM, 32 improves quality
+  rank: 16                                    # LoRA rank; 8 saves VRAM, 32 improves quality
   learning_rate: 1e-4
   resolution: 512                            # training resolution (512 recommended for SD1.5)
   instance_prompt: "factory_style industrial warehouse photorealistic"
@@ -21,10 +21,11 @@ style_transfer:
   controlnet_strength: 0.80                      # structure preservation (higher = closer to original layout)
   style_reference: null                           # filename in sample_images_dir to use as fixed style reference, null = first image found
   ipadapter_weight: 0.55                         # style injection strength (higher = more factory-like)
-  denoising_strength: 0.60                       # img2img strength (lower = more similar to input frame)
+  denoising_strength: 0.40                       # img2img strength (lower = more similar to input frame)
+  temporal_blend_alpha: 0.15                     # carry-over from previous frame (0 = off, 0.1–0.2 recommended)
   steps: 20
   cfg: 7.0
-  sampler: "euler_ancestral"
+  sampler: "euler"
   scheduler: "karras"
   processing_resolution: 768                     # max side length for processing; "original" to disable scaling
   prompt: "photorealistic industrial factory, warehouse interior, concrete floor texture, overhead birds-eye view, dramatic tilt angle, worn concrete floor, AVG, AMR, AMR automated mobile robot, concrete floor, metal shelving, yellow hazard stripe, yellow safety walkway markers, sharp details, high resolution, realistic"

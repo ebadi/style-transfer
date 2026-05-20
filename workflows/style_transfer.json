@@ -78,7 +78,7 @@
   },
   "11": {
     "class_type": "LoadImage",
-    "_comment": "style reference — one of the real factory images, cycled per-frame by the worker",
+    "_comment": "style reference — single fixed factory image uploaded once and reused for all frames",
     "inputs": {
       "image": "style_ref_000000.jpg"
     }
@@ -130,9 +130,9 @@
       "seed":           42,
       "steps":          20,
       "cfg":            7.0,
-      "sampler_name":   "euler_ancestral",
+      "sampler_name":   "euler",
       "scheduler":      "karras",
-      "denoise":        0.60
+      "denoise":        0.40
     }
   },
   "16": {

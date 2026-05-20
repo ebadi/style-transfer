@@ -15,8 +15,10 @@ import time
 import uuid
 from pathlib import Path
 
+import numpy as np
 import requests
 import yaml
+from PIL import Image
 from tqdm import tqdm
 
 
@@ -306,6 +308,8 @@ def main():
     # ── process frames ─────────────────────────────────────────────────────
     print(f"\nProcessing {len(frames)} frames (this is the slow part)...")
     failed = []
+    blend_alpha = float(cfg["style_transfer"].get("temporal_blend_alpha", 0.0))
+    prev_styled: np.ndarray | None = None
 
     for idx, frame_path in enumerate(tqdm(frames, unit="frame")):
         frame_name = f"in_{idx:06d}.png"
@@ -328,10 +332,21 @@ def main():
             history = wait_for_job(comfyui_url, prompt_id)
             out_path = Path(frames_out_dir) / f"styled_{idx:06d}.png"
             download_output(comfyui_url, history, out_path)
+
+            # Temporal blending: mix current frame with previous to suppress flicker
+            curr = np.array(Image.open(out_path)).astype(np.float32)
+            if blend_alpha > 0 and prev_styled is not None:
+                blended = (1.0 - blend_alpha) * curr + blend_alpha * prev_styled
+                Image.fromarray(blended.clip(0, 255).astype(np.uint8)).save(out_path)
+                prev_styled = blended
+            else:
+                prev_styled = curr
         except Exception as e:
             print(f"\n  Frame {idx} failed: {e} — copying original as fallback")
             shutil.copy2(frame_path, Path(frames_out_dir) / f"styled_{idx:06d}.png")
             failed.append(idx)
+            # prev_styled intentionally not updated so the next frame blends with
+            # the last successfully stylised frame, not the raw Gazebo fallback
 
     if failed:
         print(
