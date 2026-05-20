@@ -26,7 +26,7 @@ Update `config.yaml` with the correct video filename under `input.video`.
 ### 2. Download pre-trained models
 
 ```bash
-chmod +x download_models.sh
+chmod +x *.sh
 ./download_models.sh
 ```
 
@@ -51,15 +51,3 @@ docker compose --profile inference up
 ```
 
 Output video: `data/output/stylized_video.mp4`.
-
-## Configuration
-
-All parameters are in `config.yaml`. Key settings:
-
-| Parameter | Effect |
-|---|---|
-| `lora.training_steps` | More steps = stronger style learning |
-| `style_transfer.style_reference` | Filename of the factory image to use as style reference (null = first image found) |
-| `style_transfer.denoising_strength` | Higher = more stylization, less geometric fidelity |
-| `style_transfer.controlnet_strength` | Higher = closer to original Gazebo geometry |
-| `style_transfer.ipadapter_weight` | Higher = stronger colour/texture from the reference image |
