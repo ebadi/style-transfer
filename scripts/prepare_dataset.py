@@ -6,6 +6,7 @@ in the directory as an image, so mixing in .txt files causes PIL errors.
 The instance prompt is passed directly via --instance_prompt at training time.
 """
 
+import shutil
 import sys
 from pathlib import Path
 
@@ -27,6 +28,8 @@ def prepare_dataset(
 ) -> int:
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
+    for f in output_path.iterdir():
+        f.unlink() if f.is_file() else shutil.rmtree(f)
 
     extensions = {".jpg", ".jpeg", ".png", ".bmp", ".webp", ".JPG", ".JPEG", ".PNG"}
     images = [p for p in Path(images_dir).iterdir() if p.suffix in extensions]
