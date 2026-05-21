@@ -42,7 +42,7 @@ accelerate launch \
     --output_dir="/tmp/lora_output" \
     --instance_prompt="$CAPTION" \
     --resolution="$RESOLUTION" \
-    --train_batch_size=1 \
+    --train_batch_size=2 \
     --gradient_accumulation_steps=4 \
     --learning_rate="$LR" \
     --lr_scheduler="cosine" \
@@ -50,7 +50,6 @@ accelerate launch \
     --max_train_steps="$STEPS" \
     --rank="$RANK" \
     --mixed_precision="fp16" \
-    --gradient_checkpointing \
     --enable_xformers_memory_efficient_attention \
     --use_8bit_adam \
     --checkpointing_steps=500 \

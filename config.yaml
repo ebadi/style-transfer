@@ -8,10 +8,10 @@ output:
 
 lora:
   output_name: factory_lora                  # name for the trained LoRA file
-  training_steps: 2000                       # 1500-3000 recommended for ~200 images
-  rank: 16                                    # LoRA rank; 8 saves VRAM, 32 improves quality
+  training_steps: 10000                      # 1500-3000 recommended for ~200 images; scaled up for 1000 images
+  rank: 64                                    # LoRA rank; 8 saves VRAM, 32 improves quality, 64 for high fidelity
   learning_rate: 1e-4
-  resolution: 512                            # training resolution (512 recommended for SD1.5)
+  resolution: 768                            # training resolution; 768 matches inference processing_resolution
   instance_prompt: "factory_style industrial warehouse photorealistic"
   base_model_hf: "SG161222/Realistic_Vision_V5.1_noVAE"
 
