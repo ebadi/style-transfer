@@ -23,12 +23,12 @@ style_transfer:
   ipadapter_weight: 0.55                         # style injection strength (higher = more factory-like)
   denoising_strength: 0.40                       # img2img strength (lower = more similar to input frame)
   temporal_blend_alpha: 0.15                     # carry-over from previous frame (0 = off, 0.1–0.2 recommended)
-  steps: 20
-  cfg: 7.0
+  steps: 28
+  cfg: 7.5
   sampler: "euler"
   scheduler: "karras"
   processing_resolution: 768                     # max side length for processing; "original" to disable scaling
-  prompt: "photorealistic industrial factory, warehouse interior, concrete floor texture, overhead birds-eye view, dramatic tilt angle, worn concrete floor, AVG, AMR, AMR automated mobile robot, concrete floor, metal shelving, yellow hazard stripe, yellow safety walkway markers, sharp details, high resolution, realistic"
+  prompt: "photorealistic industrial factory, warehouse interior, worn concrete floor texture, overhead birds-eye view, dramatic tilt angle, AMR automated mobile robot, metal shelving, yellow hazard stripe, yellow safety walkway markers, sharp details, high resolution, industrial photography, DSLR, physically based rendering, realistic lighting"
   negative_prompt: "animated, cartoon, 3d render, cgi, unrealistic, blurry, low quality, painterly, illustration, sketch, oversaturated, glowing white orb lighting, overexposed"
 
 video:

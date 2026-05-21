@@ -19,7 +19,7 @@
     "class_type": "CLIPTextEncode",
     "_comment": "positive prompt",
     "inputs": {
-      "text": "photorealistic industrial factory, warehouse interior, concrete floor texture, overhead birds-eye view, dramatic tilt angle, worn concrete floor, AVG, AMR, AMR automated mobile robot, concrete floor, metal shelving, yellow hazard stripe, yellow safety walkway markers, sharp details, high resolution, realistic",
+      "text": "photorealistic industrial factory, warehouse interior, worn concrete floor texture, overhead birds-eye view, dramatic tilt angle, AMR automated mobile robot, metal shelving, yellow hazard stripe, yellow safety walkway markers, sharp details, high resolution, industrial photography, DSLR, physically based rendering, realistic lighting",
       "clip": ["2", 1]
     }
   },
@@ -109,7 +109,7 @@
       "image":           ["8", 0],
       "strength":        0.80,
       "start_percent":   0.0,
-      "end_percent":     1.0
+      "end_percent":     0.85
     }
   },
   "14": {
@@ -128,8 +128,8 @@
       "negative":       ["13", 1],
       "latent_image":   ["14", 0],
       "seed":           42,
-      "steps":          20,
-      "cfg":            7.0,
+      "steps":          28,
+      "cfg":            7.5,
       "sampler_name":   "euler",
       "scheduler":      "karras",
       "denoise":        0.40
