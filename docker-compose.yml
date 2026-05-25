@@ -10,7 +10,7 @@ services:
       - ./models:/app/ComfyUI/models
       - comfyui_input:/app/ComfyUI/input
       - comfyui_output:/app/ComfyUI/output
-      - ./workflows:/workflows
+      - ./workflows:/app/ComfyUI/user/default/workflows
     deploy:
       resources:
         reservations:
