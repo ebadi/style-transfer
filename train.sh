@@ -4,7 +4,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 echo "Stopping running containers..."
-docker compose stop comfyui worker 2>/dev/null || true
+docker compose --profile training down --remove-orphans 2>/dev/null || true
 
 echo "Building lora-trainer image..."
 docker compose --profile training build lora-trainer

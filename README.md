@@ -44,10 +44,12 @@ docker compose build
 
 Trains a LoRA on your factory images. Output: `models/loras/factory_lora.safetensors`.
 
+> **Note:** With the default 1500-step config, training takes ~2 hours on an Intel Core i9-10900KF + NVIDIA GeForce RTX 2070 SUPER (8 GB VRAM) with 32 GB RAM.
+
 ### 5. Run style transfer
 
 ```bash
-docker compose --profile inference up
+./infer.sh
 ```
 
 Output video: `data/output/stylized_video.mp4`.
