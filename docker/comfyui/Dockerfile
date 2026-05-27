@@ -41,6 +41,9 @@ RUN git clone https://github.com/cubiq/ComfyUI_IPAdapter_plus.git
 RUN git clone https://github.com/Fannovel16/comfyui_controlnet_aux.git && \
     pip3 install --no-cache-dir -r comfyui_controlnet_aux/requirements.txt
 
+# Adds POST /workflow/convert endpoint to convert graph format → API format
+RUN git clone https://github.com/SethRobinson/comfyui-workflow-to-api-converter-endpoint.git
+
 WORKDIR /app/ComfyUI
 
 EXPOSE 8188

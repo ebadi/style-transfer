@@ -135,6 +135,13 @@ def wait_for_comfyui(url: str, timeout: int = 180):
     raise RuntimeError(f"ComfyUI did not become ready within {timeout}s")
 
 
+def convert_workflow(url: str, graph: dict) -> dict:
+    """Convert a graph-format workflow to API format via ComfyUI's /workflow/convert endpoint."""
+    r = requests.post(f"{url}/workflow/convert", json=graph, timeout=30)
+    r.raise_for_status()
+    return r.json()
+
+
 def submit_workflow(url: str, workflow: dict, client_id: str) -> str:
     payload = {"prompt": workflow, "client_id": client_id}
     r = requests.post(f"{url}/prompt", json=payload, timeout=30)
@@ -297,7 +304,7 @@ def main():
 
     # ── load base workflow ─────────────────────────────────────────────────
     with open("/workflows/style_transfer.json") as f:
-        base_workflow = json.load(f)
+        base_workflow = convert_workflow(comfyui_url, json.load(f))
 
     client_id = str(uuid.uuid4())
 

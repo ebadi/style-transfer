@@ -2,6 +2,16 @@
 
 Converts a Gazebo simulator video into photorealistic factory footage using your own factory images as a style reference.
 
+[`workflow/style_transfer.json`](workflow/style_transfer.json)
+![workflow](workflow.png)
+
+> The workflow takes two inputs:
+> - **Simulator frame**: a single frame extracted from the simulator video — provides the scene geometry and structure, preserved via ControlNet (Canny edges).
+> - **Style reference**: a real factory photo from your `sample_images/` directory , provides the color, texture, and lighting injected via IPAdapter. 
+>
+> Temporal consistency is handled by the worker **after** ComfyUI returns each frame: it blends the current styled frame with the previous one using a configurable `temporal_blend_alpha` (see `config.yaml`). This is a pixel-level mix in Python.
+
+
 ## Prerequisites
 
 - Docker and Docker Compose (v2)
