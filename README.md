@@ -2,6 +2,18 @@
 
 Converts Gazebo simulator video into photorealistic factory footage using your own factory images as a style reference.
 
+## Results
+
+**Video pipeline** (AnimateDiff — temporal attention across frames):
+
+[![Video pipeline result](https://img.youtube.com/vi/OwaCi2yhjV8/0.jpg)](https://www.youtube.com/watch?v=OwaCi2yhjV8)
+
+**Frame pipeline** (per-frame with temporal blending):
+
+[![Frame pipeline result](https://img.youtube.com/vi/VyWcwXFuuoU/0.jpg)](https://www.youtube.com/watch?v=VyWcwXFuuoU)
+
+---
+
 Two inference pipelines are available and share the same training, Docker containers, and configuration:
 
 | | Video pipeline | Image pipeline |
@@ -69,10 +81,21 @@ Training is optional — the pipeline still runs without it (set `lora_strength:
 ```bash
 ./infer.sh video    # AnimateDiff video pipeline (default)
 ./infer.sh frame    # per-frame pipeline
-./infer.sh          # same as video
 ```
 
 Output: `data/output/stylized_video.mp4`
+
+---
+
+### ComfyUI web interface
+
+ComfyUI starts automatically with `./infer.sh` and is accessible in your browser while inference is running:
+
+```
+http://localhost:8188
+```
+
+Both workflows (`style_transfer_video` and `style_transfer_frame`) are visible in the **Workflows** menu and can be inspected or edited on the canvas. Changes saved from the web UI are written back to `workflows/` via the volume mount.
 
 ---
 
