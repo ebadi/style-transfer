@@ -120,15 +120,16 @@ def select_style_ref(factory_dir: Path, cfg: dict) -> Path:
 
 def download_output(url: str, history_entry: dict, dest: Path, timeout: int = 60):
     for node_output in history_entry.get("outputs", {}).values():
-        for image in node_output.get("images", []):
-            r = requests.get(
-                f"{url}/view",
-                params={"filename": image["filename"], "subfolder": image.get("subfolder", ""), "type": "output"},
-                timeout=timeout,
-            )
-            r.raise_for_status()
-            dest.write_bytes(r.content)
-            return
+        for key in ("images", "gifs", "videos"):
+            for item in node_output.get(key, []):
+                r = requests.get(
+                    f"{url}/view",
+                    params={"filename": item["filename"], "subfolder": item.get("subfolder", ""), "type": "output"},
+                    timeout=timeout,
+                )
+                r.raise_for_status()
+                dest.write_bytes(r.content)
+                return
     raise RuntimeError("No output found in ComfyUI job output")
 
 
