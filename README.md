@@ -4,6 +4,10 @@ Converts Gazebo simulator video into photorealistic factory footage using your o
 
 ## Results
 
+**Gazebo simulation video** : [download it from here](data/input/cam164.mp4)
+
+[![Gazebo simulation raw results](https://img.youtube.com/vi/E5qSeS-r_CQ/0.jpg)](https://www.youtube.com/watch?v=E5qSeS-r_CQ)
+
 **Video pipeline** (AnimateDiff — temporal attention across frames):
 
 [![Video pipeline result](https://img.youtube.com/vi/OwaCi2yhjV8/0.jpg)](https://www.youtube.com/watch?v=OwaCi2yhjV8)
