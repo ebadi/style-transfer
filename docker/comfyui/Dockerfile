@@ -41,6 +41,19 @@ RUN git clone https://github.com/cubiq/ComfyUI_IPAdapter_plus.git
 RUN git clone https://github.com/Fannovel16/comfyui_controlnet_aux.git && \
     pip3 install --no-cache-dir -r comfyui_controlnet_aux/requirements.txt
 
+# Video I/O nodes (load/save video natively inside ComfyUI)
+RUN git clone https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git && \
+    pip3 install --no-cache-dir -r ComfyUI-VideoHelperSuite/requirements.txt
+
+# AnimateDiff-Evolved (temporal attention across video frames — no extra requirements)
+RUN git clone https://github.com/Kosinkadink/ComfyUI-AnimateDiff-Evolved.git
+
+# Advanced ControlNet — required for ControlNet to work with AnimateDiff sliding context window
+RUN git clone https://github.com/Kosinkadink/ComfyUI-Advanced-ControlNet.git
+
+# Adds POST /workflow/convert endpoint to convert graph format → API format
+RUN git clone https://github.com/SethRobinson/comfyui-workflow-to-api-converter-endpoint.git
+
 WORKDIR /app/ComfyUI
 
 EXPOSE 8188

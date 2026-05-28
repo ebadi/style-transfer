@@ -11,6 +11,7 @@ services:
       - comfyui_input:/app/ComfyUI/input
       - comfyui_output:/app/ComfyUI/output
       - ./workflows:/workflows
+      - ./workflows:/app/ComfyUI/user/default/workflows
     deploy:
       resources:
         reservations:
@@ -44,7 +45,7 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              device_ids: ['0']
+              device_ids: ['1']
               capabilities: [gpu]
     profiles:
       - training
@@ -55,7 +56,6 @@ services:
     container_name: styletransfer_worker
     volumes:
       - ./data:/data
-      - ./models:/models:ro
       - ./config.yaml:/config.yaml:ro
       - ./workflows:/workflows:ro
       - ./scripts/run_pipeline.py:/scripts/run_pipeline.py:ro
@@ -65,6 +65,7 @@ services:
       - COMFYUI_URL=http://comfyui:8188
       - COMFYUI_INPUT_DIR=/comfyui_input
       - COMFYUI_OUTPUT_DIR=/comfyui_output
+      - PIPELINE_MODE=${PIPELINE_MODE:-video}
     depends_on:
       comfyui:
         condition: service_healthy

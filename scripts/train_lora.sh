@@ -44,9 +44,10 @@ accelerate launch \
     --resolution="$RESOLUTION" \
     --train_batch_size=2 \
     --gradient_accumulation_steps=4 \
+    --gradient_checkpointing \
     --learning_rate="$LR" \
     --lr_scheduler="cosine" \
-    --lr_warmup_steps=100 \
+    --lr_warmup_steps=300 \
     --max_train_steps="$STEPS" \
     --rank="$RANK" \
     --mixed_precision="fp16" \

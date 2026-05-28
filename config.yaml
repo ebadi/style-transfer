@@ -1,37 +1,47 @@
 input:
-  video: /data/input/cam164.mp4  # path to your Gazebo video (mp4 or avi)
+  video: /data/input/cam164.mp4           # path to your Gazebo video (mp4 or avi)
   sample_images_dir: /data/sample_images/  # directory with your real factory images
 
 output:
   video: /data/output/stylized_video.mp4
-  frames_dir: /data/output/frames/
+  frames_dir: /data/output/frames/         # intermediate frames (image pipeline only)
 
 lora:
   output_name: factory_lora                  # name for the trained LoRA file
-  training_steps: 10000                      # 1500-3000 recommended for ~200 images; scaled up for 1000 images
-  rank: 64                                    # LoRA rank; 8 saves VRAM, 32 improves quality, 64 for high fidelity
+  training_steps: 10000                      # 1500-3000 for ~200 images; 10000 for ~1000 images
+  rank: 64                                   # LoRA rank; 16 saves VRAM, 32 good quality, 64 high fidelity
   learning_rate: 1e-4
-  resolution: 768                            # training resolution; 768 matches inference processing_resolution
+  resolution: 512                            # training resolution
   instance_prompt: "factory_style industrial warehouse photorealistic"
   base_model_hf: "SG161222/Realistic_Vision_V5.1_noVAE"
 
+# ── Video pipeline (AnimateDiff) ──────────────────────────────────────────────
+animatediff:
+  motion_module: "mm_sd_v15_v2.ckpt"
+  context_length: 16   # frames per temporal window
+  context_overlap: 8   # overlap between windows — reduces seam artifacts
+
+# ── Shared inference parameters ───────────────────────────────────────────────
 style_transfer:
-  base_model: "realisticVisionV51.safetensors"   # filename in models/checkpoints/
-  lora_strength: 0.85                            # how strongly to apply LoRA (0.0-1.0)
-  controlnet_strength: 0.80                      # structure preservation (higher = closer to original layout)
-  style_reference: null                           # filename in sample_images_dir to use as fixed style reference, null = first image found
-  ipadapter_weight: 0.55                         # style injection strength (higher = more factory-like)
-  denoising_strength: 0.40                       # img2img strength (lower = more similar to input frame)
-  temporal_blend_alpha: 0.15                     # carry-over from previous frame (0 = off, 0.1–0.2 recommended)
+  base_model: "realisticVisionV51.safetensors"
+  controlnet_model: "control_v11p_sd15_canny.safetensors"
+  lora_strength: 0.85
+  controlnet_strength: 0.80
+  style_reference: null                      # filename in sample_images_dir, null = first image found
+  ipadapter_weight: 0.40
+  denoising_strength: 0.35
   steps: 20
   cfg: 7.0
-  sampler: "euler"
+  sampler: "dpmpp_2m"
   scheduler: "karras"
-  processing_resolution: 768                     # max side length for processing; "original" to disable scaling
+  processing_resolution: 512                 # video pipeline: output width; image pipeline: max side length
   prompt: "photorealistic industrial factory, warehouse interior, concrete floor texture, overhead birds-eye view, dramatic tilt angle, worn concrete floor, AVG, AMR, AMR automated mobile robot, concrete floor, metal shelving, yellow hazard stripe, yellow safety walkway markers, sharp details, high resolution, realistic"
   negative_prompt: "animated, cartoon, 3d render, cgi, unrealistic, blurry, low quality, painterly, illustration, sketch, oversaturated, glowing white orb lighting, overexposed"
 
+  # image pipeline only
+  temporal_blend_alpha: 0.15                 # frame carry-over to reduce flicker (0 = off)
+
 video:
-  fps: auto        # auto detects from input; or set a number e.g. 25
-  codec: libx264
-  quality: 18      # CRF: 0=lossless, 18=high quality, 28=lower quality
+  fps: auto          # auto detects from input; or set a number e.g. 25
+  codec: libx264     # image pipeline only
+  quality: 18        # image pipeline only — CRF: 0=lossless, 18=high quality
